@@ -2,6 +2,8 @@
 
 Model Context Protocol server for Portuguese Tax Assistant.
 
+**Ask in ANY language 🌍 — Get answers in YOUR language!**
+
 ## ⚠️ IMPORTANT: MCP Requires Local Setup
 
 **MCP protocol works ONLY through local Node.js process (stdio transport).**
@@ -109,7 +111,7 @@ User: What are the VAT rates in Portugal?
 Claude: [automatically uses ask_portuguese_tax_question tool]
 ```
 
-**Supported languages:** 🇵🇹 Portuguese, 🇷🇺 Russian, 🇬🇧 English
+**Supported languages:** ANY language! Ask in your language (English, Portuguese, Russian, Spanish, French, German, Chinese, etc.) and get answers in the same language.
 
 **Tax specialists:**
 - **CIVA**: IVA/VAT (rates, exemptions, invoicing)
@@ -167,7 +169,11 @@ Content-Type: application/json
 }
 ```
 
-### Example (curl)
+### Examples
+
+**Works with ANY language!** Below are examples in Russian, Portuguese, and English, but you can use Spanish, French, German, Chinese, Arabic, or any other language.
+
+#### Example (curl - Russian)
 
 ```bash
 curl -X POST https://af.fiz.co/api/mcp/query \
@@ -178,7 +184,7 @@ curl -X POST https://af.fiz.co/api/mcp/query \
   }'
 ```
 
-### Example (Python)
+#### Example (Python - Portuguese)
 
 ```python
 import requests
@@ -198,7 +204,7 @@ data = response.json()
 print(data["response"])
 ```
 
-### Example (JavaScript)
+#### Example (JavaScript - English)
 
 ```javascript
 const response = await fetch("https://af.fiz.co/api/mcp/query", {
@@ -344,9 +350,10 @@ curl -X POST http://localhost:3000/api/mcp/query \
 ## 📚 Documentation
 
 ### Supported Languages
-- 🇵🇹 Portuguese
-- 🇷🇺 Russian
-- 🇬🇧 English
+- 🌍 **ANY language!** Ask questions in your native language
+- 💬 Automatic language detection
+- 🔄 Responses in the same language you used
+- ✅ Tested with: Portuguese, Russian, English, Spanish, French, German, Chinese, and more
 
 ### Tax Specialists
 - **CIVA**: IVA (VAT) - rates, exemptions, invoicing
