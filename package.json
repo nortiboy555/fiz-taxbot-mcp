@@ -1,0 +1,17 @@
+{
+  "name": "fiz-taxbot-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server wrapper for FIZ AI TaxBot",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "node-fetch": "^3.3.2"
+  },
+  "keywords": ["mcp", "tax", "portugal", "anthropic"],
+  "author": "FIZ",
+  "license": "MIT"
+}
