@@ -38,7 +38,9 @@ Or download as ZIP and extract.
 - Contact FIZ team for API key
 - You will receive external tier key (starts with `fiz_mcp_external_...`)
 
-### 3. Configure Claude Desktop
+### 3. Configure Claude Desktop or Claude Code
+
+#### For Claude Desktop:
 
 Edit your Claude Desktop config file:
 
@@ -63,15 +65,60 @@ Add:
 }
 ```
 
+#### For Claude Code:
+
+Create `.mcp.json` file in your project root:
+
+```json
+{
+  "mcpServers": {
+    "fiz-taxbot": {
+      "command": "node",
+      "args": ["/absolute/path/to/fiz-taxbot-mcp/index.js"],
+      "env": {
+        "FIZ_API_KEY": "your_api_key_here",
+        "FIZ_API_URL": "https://af.fiz.co"
+      }
+    }
+  }
+}
+```
+
 **⚠️ Important**:
 - Replace `/absolute/path/to/fiz-taxbot-mcp/` with actual path where you cloned the repository!
 - Example macOS: `"/Users/username/fiz-taxbot-mcp/index.js"`
 - Example Windows: `"C:\\Users\\username\\fiz-taxbot-mcp\\index.js"`
 - Use `https://af.fiz.co` for production
 
-### 4. Restart Claude Desktop
+### 4. Restart Claude Desktop/Code
 
-The MCP server will appear in Claude Desktop's tool panel.
+The MCP server will appear as available tool `ask_portuguese_tax_question`.
+
+### 5. How to Use
+
+In Claude Desktop/Code, use the tool directly:
+
+```
+Ask Portuguese tax question: "Какие ставки НДС в Португалии?"
+```
+
+Or in conversation:
+
+```
+User: What are the VAT rates in Portugal?
+Claude: [automatically uses ask_portuguese_tax_question tool]
+```
+
+**Supported languages:** 🇵🇹 Portuguese, 🇷🇺 Russian, 🇬🇧 English
+
+**Tax specialists:**
+- **CIVA**: IVA/VAT (rates, exemptions, invoicing)
+- **CIRS**: IRS (Personal Income Tax)
+- **CIRC**: IRC (Corporate Tax)
+- **SEGSOC**: Social Security contributions
+- **RITI**: Intra-community transactions
+- **RGIT**: Tax fines and penalties
+- **CIS**: Stamp Duty
 
 ---
 
