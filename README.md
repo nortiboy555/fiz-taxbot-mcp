@@ -224,91 +224,6 @@ console.log(data.response);
 
 ---
 
-## 🌐 Public Hosting (Production)
-
-### Option 1: Vercel (Recommended for Next.js)
-
-#### 1. Prepare for deployment
-
-```bash
-# From project root
-npm run build
-```
-
-#### 2. Deploy to Vercel
-
-```bash
-npx vercel
-```
-
-Follow prompts:
-- Set up project
-- Configure environment variables:
-  - `DATABASE_URL` (Neon Postgres)
-  - `OPENAI_API_KEY`
-  - All specialist vector store IDs
-  - `NEXTAUTH_SECRET`
-  - `NEXTAUTH_URL` (your production domain)
-
-#### 3. Update MCP server config
-
-```json
-{
-  "mcpServers": {
-    "fiz-taxbot": {
-      "command": "node",
-      "args": ["/path/to/mcp-server/index.js"],
-      "env": {
-        "FIZ_API_KEY": "fiz_mcp_external_xxxxx",
-        "FIZ_API_URL": "https://your-app.vercel.app"
-      }
-    }
-  }
-}
-```
-
-### Option 2: Docker + Any Cloud
-
-#### 1. Build Docker image
-
-```bash
-# From project root
-docker build -t fiz-taxbot .
-```
-
-#### 2. Run container
-
-```bash
-docker run -p 3000:3000 \
-  -e DATABASE_URL="your_database_url" \
-  -e OPENAI_API_KEY="your_key" \
-  fiz-taxbot
-```
-
-#### 3. Deploy to cloud
-
-- AWS ECS
-- Google Cloud Run
-- DigitalOcean App Platform
-- Railway
-- Render
-
----
-
-## 🔑 API Key Tiers
-
-### Internal Tier (`mcp_fiz_internal`)
-- ✅ Unlimited requests
-- ✅ Latest prompts (bleeding edge)
-- ✅ @fiz.co developers only
-
-### External Tier (`mcp_external`)
-- 📊 1000 requests/month
-- 📚 Published prompts (stable)
-- 🌍 External developers
-
----
-
 ## 🧪 Testing
 
 ### Test REST API (Production)
@@ -322,28 +237,13 @@ curl -X POST https://af.fiz.co/api/mcp/query \
   }'
 ```
 
-### Test MCP in Claude Desktop
+### Test MCP in Claude Desktop/Code
 
-1. Open Claude Desktop
+1. Open Claude Desktop or Claude Code
 2. Start new conversation
-3. Click tool icon (should show "fiz-taxbot")
-4. Select "ask_portuguese_tax_question"
-5. Enter your question in any language (PT/RU/EN)
-
-### Test Local Development
-
-```bash
-# Start Next.js server
-npm run dev
-
-# Test API
-curl -X POST http://localhost:3000/api/mcp/query \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "Qual é a taxa de IVA em Portugal?"
-  }'
-```
+3. Ask your tax question in any language
+4. Claude will automatically use the `ask_portuguese_tax_question` tool
+5. You'll receive an answer in the same language
 
 ---
 
@@ -364,34 +264,34 @@ curl -X POST http://localhost:3000/api/mcp/query \
 - **RGIT**: Fines and penalties
 - **CIS**: Stamp Duty
 
-### Auto-Continuation
-- Messages within 60s: Always continue conversation
-- Messages within 5min + same specialist: Continue
-- Messages after 30min: New conversation
-
-Configuration: `mcp-config.json`
+### Features
+- 🔄 **Conversation continuity**: Automatically continues your tax conversation
+- 🎯 **Smart routing**: Routes questions to the right tax specialist
+- 📚 **Official sources**: All answers based on Portuguese tax codes
+- 🌐 **Multi-language**: Ask and receive answers in any language
 
 ---
 
 ## 🛠️ Troubleshooting
 
-### "Server not found" in Claude Desktop
+### "Server not found" in Claude Desktop/Code
 
-1. Check file path is absolute
-2. Verify Node.js is installed: `node --version`
-3. Check server logs in Claude Desktop console
+1. Verify file path is absolute (not relative)
+2. Check Node.js is installed: `node --version`
+3. Restart Claude Desktop/Code after config changes
 
 ### "Unauthorized" error
 
-1. Verify API key is correct
-2. Check key is active in admin panel
-3. Ensure API_URL is correct
+1. Verify your API key is correct
+2. Contact FIZ team if you don't have an API key
+3. Ensure `FIZ_API_URL` is set to `https://af.fiz.co`
 
-### "Connection refused"
+### Tool not appearing
 
-1. Ensure Next.js server is running: `npm run dev`
-2. Check port 3000 is not blocked
-3. Verify FIZ_API_URL matches server address
+1. Check `.mcp.json` syntax is valid JSON
+2. Verify `command` and `args` paths are correct
+3. Restart Claude Desktop/Code
+4. Check Claude's MCP settings/logs for errors
 
 ---
 
