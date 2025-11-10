@@ -19,7 +19,7 @@ If you cannot run Node.js locally, use **REST API** instead (see below).
 ### 1. Clone repository and install dependencies
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/fiz-taxbot-mcp.git
+git clone https://github.com/nortiboy555/fiz-taxbot-mcp.git
 cd fiz-taxbot-mcp
 npm install
 ```
