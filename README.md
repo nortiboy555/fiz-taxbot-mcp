@@ -30,15 +30,7 @@ Or download as ZIP and extract.
 
 ### 2. Get your API key
 
-**For FIZ internal developers:**
-- Go to https://af.fiz.co/admin/mcp-keys
-- Login with @fiz.co email
-- Create new API key (tier: `mcp_fiz_internal`)
-- Copy the key (starts with `fiz_mcp_internal_...`)
-
-**For external developers:**
-- Contact FIZ team for API key
-- You will receive external tier key (starts with `fiz_mcp_external_...`)
+Contact FIZ team to receive your API key.
 
 ### 3. Configure Claude Desktop or Claude Code
 
@@ -177,7 +169,7 @@ Content-Type: application/json
 
 ```bash
 curl -X POST https://af.fiz.co/api/mcp/query \
-  -H "Authorization: Bearer fiz_mcp_external_xxxxx" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "question": "Какая ставка НДС в Португалии?"
@@ -192,7 +184,7 @@ import requests
 response = requests.post(
     "https://af.fiz.co/api/mcp/query",
     headers={
-        "Authorization": "Bearer fiz_mcp_external_xxxxx",
+        "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json"
     },
     json={
@@ -210,7 +202,7 @@ print(data["response"])
 const response = await fetch("https://af.fiz.co/api/mcp/query", {
   method: "POST",
   headers: {
-    "Authorization": "Bearer fiz_mcp_external_xxxxx",
+    "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
