@@ -58,14 +58,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       {
         name: 'ask_portuguese_tax_question',
         description: 'Ask questions about Portuguese taxes (IVA, IRS, IRC, Social Security, etc.). ' +
-                     'Supports Portuguese, Russian, and English. ' +
-                     'Provides expert answers based on official Portuguese tax codes.',
+                     'Supports ANY language (Portuguese, Russian, English, Spanish, French, German, Chinese, etc.). ' +
+                     'Provides expert answers based on official Portuguese tax codes. ' +
+                     'Long answers (>400 chars) return AI summary + PDF link with full details.',
         inputSchema: {
           type: 'object',
           properties: {
             question: {
               type: 'string',
-              description: 'Your tax question in any language (Portuguese, Russian, or English)',
+              description: 'Your tax question in any language',
             },
             specialist: {
               type: 'string',
@@ -127,22 +128,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       // Format successful response
       let responseText = data.response;
 
-      if (data.references && data.references.length > 0) {
-        responseText += `\n\n📚 References: ${data.references.join(', ')}`;
-      }
-
-      if (data.followupQuestions && data.followupQuestions.length > 0) {
-        responseText += '\n\n💡 Follow-up questions:';
-        data.followupQuestions.forEach((q, i) => {
-          responseText += `\n${i + 1}. ${q.question}`;
-        });
-      }
-
-      responseText += `\n\n🌍 Language: ${data.detectedLanguage || 'pt'}`;
-      responseText += `\n⚙️ Specialist: ${data.specialist.toUpperCase()}`;
-
-      if (data.conversationContinued) {
-        responseText += '\n♻️ Continued previous conversation';
+      // Add PDF attachment if available (for long responses)
+      if (data.attachment?.url) {
+        responseText += `\n\n📄 Full detailed answer (PDF):\n${data.attachment.url}`;
       }
 
       return {

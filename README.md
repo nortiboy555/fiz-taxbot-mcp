@@ -138,28 +138,76 @@ Content-Type: application/json
 ```json
 {
   "question": "Your tax question in any language",
-  "specialist": "civa"  // Optional: force specific specialist
+  "specialist": "civa",     // Optional: force specific specialist
+  "channel": "whatsapp",    // Optional: "web" | "whatsapp" | "telegram" | null (default: whatsapp)
+  "userId": "user123"       // Optional: external user ID for multi-user scenarios
 }
 ```
 
-### Response
+**Parameters:**
+- `question` (required): Your tax question in any language
+- `specialist` (optional): Force specific specialist: `civa`, `cirs`, `circ`, `segsoc`, `riti`, `rgit`, `cis`
+- `channel` (optional): Response format control
+  - `"web"`: Full response inline (no summary/PDF processing)
+  - `"whatsapp"` or `"telegram"`: Long responses → summary + PDF (default)
+  - `null` or omitted: Same as `whatsapp` (summary + PDF for long responses)
+- `userId` (optional): External user identifier for multi-user bots (e.g., WhatsApp/Telegram)
 
+### Response Format
+
+The API returns a minimal response optimized for messenger channels:
+
+**Short responses** (≤400 chars):
 ```json
 {
-  "response": "Answer in your language",
-  "specialist": "civa",
-  "conversationId": "...",
-  "conversationContinued": true,
-  "followupQuestions": [...],
-  "references": [...],
-  "detectedLanguage": "ru",
-  "rateLimit": {
-    "limit": 1000,
-    "used": 1,
-    "remaining": 999
+  "response": "Complete answer in your language (plain text, no markdown)"
+}
+```
+
+**Long responses** (>400 chars):
+```json
+{
+  "response": "AI-generated summary with key points (≤400 chars, plain text)",
+  "attachment": {
+    "url": "https://blob.vercel-storage.com/pdf-abc123.pdf"
   }
 }
 ```
+
+**Clarification responses** (when specialist unclear):
+```json
+{
+  "response": "I need clarification. Which tax area does your question relate to?",
+  "requiresClarification": true,
+  "clarificationOptions": [
+    {
+      "id": "civa",
+      "name": "IVA (VAT)",
+      "description": "Value Added Tax questions"
+    },
+    {
+      "id": "cirs",
+      "name": "IRS",
+      "description": "Personal Income Tax questions"
+    }
+  ]
+}
+```
+
+**Notes:**
+- Responses are in **plain text** (markdown converted for WhatsApp/Telegram)
+- **Summary** highlights key points from the full answer
+- **PDF** contains complete detailed answer with legal citations and formatting
+- PDF auto-expires after **7 days** from Vercel Blob storage
+- **No metadata fields**: API returns ONLY `response` and optionally `attachment` (no specialist, conversationId, references, etc.)
+
+**Response Processing:**
+- **Threshold**: 400 characters (configurable via database settings)
+- **Short responses** (≤400 chars): Full answer returned inline
+- **Long responses** (>400 chars): AI-generated summary + PDF with full details
+- **PDF TTL**: 7 days (auto-deleted from Vercel Blob storage)
+- **Channels**: Processing applies to `whatsapp`, `telegram`, and `null` (default)
+- **Web channel**: Set `"channel": "web"` to skip processing and get full response
 
 ### Examples
 
@@ -261,6 +309,8 @@ curl -X POST https://af.fiz.co/api/mcp/query \
 - 🎯 **Smart routing**: Routes questions to the right tax specialist
 - 📚 **Official sources**: All answers based on Portuguese tax codes
 - 🌐 **Multi-language**: Ask and receive answers in any language
+- 📄 **Smart responses**: Short answers inline, long answers as AI summary + detailed PDF
+- ☁️ **PDF storage**: Secure temporary storage on Vercel Blob (7 days TTL)
 
 ---
 
